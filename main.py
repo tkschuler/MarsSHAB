@@ -113,12 +113,11 @@ def eval(state, dt, h, der):
     out.dv = get_acceleration(state)
     out.dTs = get_dTs(state,h + dt*((math.pi/6.)/(3600.))) #dt is converted to hour angle
     out.dTi = get_dTi(state)
-    #print out.dz, out.dv, out.dTs, out.dTi
-    return outwsol = odeint(vectorfield, w0, t,
-              atol=abserr, rtol=relerr)
 
-for t1, w1 in zip(t, wsol):
-        print t1, w1[0], w1[1], w1[2], w1[3], w1[4]
+    for t1, w1 in zip(t, wsol):
+            print t1, w1[0], w1[1], w1[2], w1[3], w1[4]
+
+    return odeint(vectorfield, w0, t,atol=abserr, rtol=relerr)
 
 def integrate(state, h, dt):
     zero = StateDerrivative()

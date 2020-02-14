@@ -9,31 +9,31 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from sympy import symbols, diff, sin
 
+import config
+
 class Mars_Main:
 
     def __init__(self):
-        self.Cp_co2 = 735.0 #J/Kg*K  Specifc Heat Capacity, Constant Pressure
-        self.Cv_co2 = 657.0 #J/Kg*K  Specifc Heat Capacity, Constant Volume
-        self.Rsp_co2 = 188.92 #J/Kg*K Gas Constant
-        self.d = 18 #diameter
+        self.Cp_co2 = config.mars_properties['Cp_co2']
+        self.Cv_co2 = config.mars_properties['Cv_co2']
+        self.Rsp_co2 = config.mars_properties['Rsp_co2']
+        self.Ls = radians(config.mars_properties['Ls'])
+        self.lat = radians(config.mars_properties['lat'])
+
+        self.d = config.balloon_properties['d']
+        self.emissEnv = config.balloon_properties['emissEnv']
+        self.cp = config.balloon_properties['cp']
+
         self.vol = math.pi*4/3*pow((self.d/2),3) #volume m^3
         self.surfArea = math.pi*self.d*self.d #m^2
         self.cs_area = math.pi*self.d*self.d/4.0 #m^2
+
         self.vm_coeff = .5 #virtual mass coefficient
-
-        self.emissEnv = .03
-
         self.massEnv = self.surfArea*(9./1000.) #kg
-        #self.massPayload = 10 #Kg
-        self.mdot = 0 #Vent mass flow rate
-
-        self.cp = 320.0 #(J/(kg K)) specific heat of envelope material
+        self.mdot = 0 # Initial Mass Flow rate
         self.k = self.massEnv*self.cp #thermal mass coefficient
 
-        self.Ls = radians(153)
-        self.lat = radians(22.3)
-
-        self.dt = 1.
+        self.dt = config.dt
 
     def get_acceleration(self,v,el,T_s,T_i,mp):
         m = mars_radiation.MarsRadiation()
@@ -58,7 +58,7 @@ class Mars_Main:
 
     def solve_states(self,T_s,T_i,el,v,mp,vent,timespace,alt_dz,vel_dz):
         for i in range(0,len(timespace)-1):
-            bal = mars_sphere_balloon.Mars_Sphere_Balloon(self.d,self.emissEnv)
+            bal = mars_sphere_balloon.Mars_Sphere_Balloon()
             rad = mars_radiation.MarsRadiation()
             q_rad  = rad.get_rad_total(self.lat,self.Ls,el[i],timespace[i],self.d)
 

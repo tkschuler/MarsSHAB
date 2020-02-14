@@ -10,23 +10,25 @@ from scipy.integrate import odeint
 from scipy import optimize
 from math import pow, fabs
 
+import config
+
 class Mars_Sphere_Balloon:
-    Cp_co2 = 735.0 #J/Kg*K #assumpiton?
-    Rsp_co2 = 44.010
-    RE = 3376000.0 #m Radius of Mars
+    Cp_co2 = config.mars_properties['Cp_co2']
+    Rsp_co2 = config.mars_properties['Rsp_co2']
+    cv_Co2 = config.mars_properties['Cv_co2']
+
+    cf = config.balloon_properties['cp']
+
+    RE = 3376000.0 # (m) Radius of Mars
     SB = 5.670373E-8
-    #M =  11.3 #kg
-    #cf = 910 #specific heat of aluminim
-    cf = 320.0 #specific heat of germanium
-    cv_Co2 = 735.0 #J/Kg*K #assumpiton?
 
-    def __init__(self, d, emissEnv):
-        self.d = d #diameter
-        self.surfArea = math.pi*d*d
-        self.emissEnv = emissEnv
+    def __init__(self):
+        self.d = config.balloon_properties['d']
+        self.emissEnv = config.balloon_properties['emissEnv']
+
+        self.surfArea = math.pi*self.d*self.d
         self.massEnv = self.surfArea*.009 #density of material
-
-        self.vol = math.pi*4/3*pow((d/2),3)
+        self.vol = math.pi*4/3*pow((self.d/2),3)
 
     def get_dynamic_viscocity_co2(self,T):
         """Returns Dynamic Viscocity of CO2 as function of Temperature
@@ -223,14 +225,10 @@ class Mars_Sphere_Balloon:
 
     	Pr = self.get_Pr_co2(T_i)
 
-
     	mu = self.get_dynamic_viscocity_co2(T_i)
     	k = self.get_k_co2(T_i)
     	h = 0.13*k*pow((pow(rho_atm,2)*g*fabs(T_s-T_i)*Pr)/(T_i*pow(mu,2)),(1/3))
-        #h = .01
-        #print "h", h
         q_int = h*self.surfArea*(T_s-T_i)
-        #print colored(("q_int", q_int),"yellow")
     	return q_int
 
     def get_sum_q_surf(self,q_rad, T_s,T_i, el, v):
@@ -264,7 +262,6 @@ class Mars_Sphere_Balloon:
         return T_s
 
     '''
-
     def get_Nu_int(self,Ra):
         print "RA", Ra
         try:
@@ -304,87 +301,4 @@ class Mars_Sphere_Balloon:
         #double q_ri = 0*E_int*SB_CONST*(pow(T_s,4)-pow(T_i,4))*surface_area;
         return q_ci #// + q_ri;
 
-'''
-
-Ls = radians(153)
-lat = radians(22.3)
-#h = 5
-d = 18 #m
-el = 0.
-v = 0
-
-m = Mars_Sphere_Balloon(d,.03)
-r = mars_radiation.MarsRadiation()
-
-'''
-T_atm = 211.5
-r = mars_radiation.MarsRadiation()
-h_ang = np.arange(start=0, stop=20, step=.1)
-rad_tot = []
-T_s = []
-for h in np.nditer(h_ang):
-    #h = math.radians(h)
-    rad_total = r.get_rad_total(lat,Ls,el,h,d)
-    print "RAD_TOTAL", rad_total
-    rad_tot.append(rad_total)
-    T_s.append(m.solve_T_surf(rad_total,el,v))
-    #T_i.append(m.solve_T_i(T_s, el))
-
-plt.figure(1)
-plt.plot(h_ang,T_s)
-print "CONVECTION:", m.get_external_free_convection(200,0)
-plt.show()
-'''
-
-'''
-def model(T_s,t):
-    #h = t/3600.
-    r = mars_radiation.MarsRadiation()
-    rad_total = r.get_rad_total(lat,Ls,el,t,d)
-    dTdt = m.get_sum_q_surf(rad_total, T_s, el, v)/((m.cf*m.massEnv))
-    return dTdt
-
-# initial condition
-T_s0 = 200
-# time points
-t = np.linspace(0,100*3600,100*3600)
-# solve ODE
-T_s = odeint(model,T_s0,t)
-'''
-'''
-dt = 1
-T_s = [211.5]
-T_i = [212.3]
-el = 100.0
-v = 0.0
-
-t = np.linspace(0,100*3600,100*3600)
-for i in range(0,len(t)-1):
-    T_s_cur= T_s[i]
-    T_i_cur = T_i[i]
-
-    print T_s_cur, T_i_cur
-    r = mars_radiation.MarsRadiation()
-    rad_total = r.get_rad_total(lat,Ls,el,t[i],d)
-    dT_sdt = m.get_sum_q_surf(rad_total, T_s_cur, T_i_cur, el, v)/((m.cf*m.massEnv))
-    rho_int = r.get_rho(T_i_cur)#r.get_rho(T_i[i])
-
-    tm_air = rho_int*m.vol*m.Cp_co2
-    dT_idt = m.get_q_int(T_s_cur, T_i_cur, el)/(tm_air)
-
-    T_s.append(T_s_cur+dt*dT_sdt)
-    T_i.append(T_i_cur+dt*dT_idt)
-
-
-
-
-# plot results
-plt.plot(t/3600,T_s)
-plt.plot(t/3600,T_i)
-plt.xlabel('Time (hr)')
-plt.ylabel('T_s (K)')
-#print "k", ((m.cf*m.M))
-
-print r.get_rad_total(lat,Ls,el,100*3600,d)
-plt.show()
 '''

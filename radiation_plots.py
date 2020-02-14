@@ -6,13 +6,12 @@ import numpy as np
 
 # Test Variables
 
-doy = 306 #temporary day of year
-lat = math.radians(35.106766) # rad
+doy = 90 #temporary day of year
+lat = math.radians(22.3) # rad
 h_ang = 0
 el = 0 #elevation (m)
 
 '''PLOTS -------------------------------------------------------------------------'''
-
 
 r = radiation.Radiation(doy,lat,h_ang,el)
 
