@@ -227,7 +227,7 @@ class Mars_Sphere_Balloon:
 
     	mu = self.get_dynamic_viscocity_co2(T_i)
     	k = self.get_k_co2(T_i)
-    	h = 0.13*k*pow((pow(rho_atm,2)*g*fabs(T_s-T_i)*Pr)/(T_i*pow(mu,2)),(1/3))
+    	h = 0.13*k*pow((pow(rho_atm,2)*g*fabs(T_s-T_i)*Pr)/(T_i*pow(mu,2)),(1/3.))
         q_int = h*self.surfArea*(T_s-T_i)
     	return q_int
 
