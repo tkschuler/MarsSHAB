@@ -6,14 +6,14 @@ from math import radians
 import matplotlib.pyplot as plt
 import mars_radiation
 
-import config
+import config_mars
 
 '''
 m = mars_radiation.MarsRadiation()
 h_ang = np.arange(start=5, stop=19, step=.1)
 
-Ls = 0.0001#radians(config.mars_properties['Ls'])
-lat = lat = radians(config.mars_properties['lat'])
+Ls = radians(config.mars_properties['Ls'])
+lat = radians(config.mars_properties['lat'])
 
 G_h = []
 G_bh = []
@@ -74,57 +74,72 @@ plt.title('Total Solar Intensity at Martian Surface Level')
 #plt.plot(x,IR, label="IR Radiation from Surface")
 plt.xlabel('Time (hr)')
 plt.ylabel('Elevation (km)')
-plt.show()
+#plt.show()
 '''
 
-print "----------------------------------NO MASS FLOW------------------------------------------"
+print("----------------------------------NO MASS FLOW------------------------------------------")
 
 T_s = [210.]
 T_i = [210.]
 el =[0.]
 v= [0.]
-mp =10
 vent=0
-timespace = np.linspace(0*3600, 48*3600, 48*3600)
-alt_dz = 0
-vel_dz = 0
+timespace = np.linspace(0*3600, 24*3600, 24*3600)
+alt_dz = 2000.
+vel_dz = .1
 
 m = mars_main.Mars_Main()
-T_s,T_i,el,v = m.solve_states(T_s,T_i,el,v,mp,vent,timespace,alt_dz,vel_dz)
+T_s,T_i,el,v = m.solve_states(T_s,T_i,el,v,timespace,alt_dz,vel_dz)
 plt.figure(3,figsize=(10, 8))
 plt.plot(timespace/3600,el)
 plt.xlabel('Time (hr)')
 plt.ylabel('Elevation (m)')
 
 plt.figure(5,figsize=(10, 8))
-plt.plot(timespace/3600,T_s,label="Surface Temperature")
-plt.plot(timespace/3600,T_i,label="Internal Temperature")
+plt.plot(timespace/(3600),T_s,label="Surface Temperature")
+plt.plot(timespace/(3600),T_i,label="Internal Temperature")
 plt.xlabel('Time (hr)')
 plt.ylabel('Temperature (K)')
+plt.title('Solar Balloon Temperature - Mars')
 plt.legend(loc='upper right')
 
 ''' Comparing Mass Flow Rates'''
-
+'''
 print "----------------------------------MASS FLOW RATE 2g/s------------------------------------------"
-T_s = [210.]
-T_i = [210.]
-el =[0.]
-v= [0.]
-mp = 10
-vent=.002
-timespace = np.linspace(0*3600, 24*3600, 24*3600)
+T_s2 = [210.]
+T_i2 = [210.]
+el2 =[0.]
+v2 = [0.]
+mp = 5
+vent2 =.006
 alt_dz = 1980
 vel_dz = -.05
 
 m = mars_main.Mars_Main()
-T_s,T_i,el,v = m.solve_states(T_s,T_i,el,v,mp,vent,timespace,alt_dz,vel_dz)
+T_s,T_i,el,v = m.solve_states(T_s2,T_i2,el2,v2,mp,vent2,timespace,alt_dz,vel_dz)
 
+plt.figure(6,figsize=(10, 8))
+plt.plot(timespace/(3600),T_s,label="Surface Temperature")
+plt.plot(timespace/(3600),T_i,label="Internal Temperature")
+plt.xlabel('Time (hr)')
+plt.ylabel('Temperature (K)')
+plt.legend(loc='upper right')
+
+plt.figure(7,figsize=(10, 8))
+plt.plot(timespace/(3600),el,label="Surface Temperature")
+plt.xlabel('Time (hr)')
+plt.ylabel('Elevation (m)')
+plt.legend(loc='upper right')
+'''
+plt.show()
+
+'''
 print "----------------------------------MASS FLOW RATE 4g/s------------------------------------------"
 T_s2 = [210.]
 T_i2 = [210.]
 el2 =[0.]
 v2= [0.]
-mp = 10
+mp = 2
 vent=.004
 timespace = np.linspace(0*3600, 24*3600, 24*3600)
 alt_dz = 2040
@@ -136,7 +151,7 @@ T_s3 = [210.]
 T_i3 = [210.]
 el3 =[0.]
 v3= [0.]
-mp =10
+mp = 2
 vent=.006
 timespace = np.linspace(0*3600, 24*3600, 24*3600)
 alt_dz = 2040
@@ -144,9 +159,8 @@ vel_dz = -.05
 
 T_s3,T_i3,el3,v3 = m.solve_states(T_s3,T_i3,el3,v3,mp,vent,timespace,alt_dz,vel_dz)
 
-"""PLOTTING"""
 
-'''
+
 SMALL_SIZE = 16
 MEDIUM_SIZE = 18
 BIGGER_SIZE = 20
@@ -158,19 +172,19 @@ plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-'''
+
 
 plt.figure(1,figsize=(10, 8))
-plt.plot(timespace/3600,T_s,label="Surface Temperature")
-plt.plot(timespace/3600,T_i,label="Internal Temperature")
+plt.plot(timespace/(3600),T_s,label="Surface Temperature")
+plt.plot(timespace/(3600),T_i,label="Internal Temperature")
 plt.xlabel('Time (hr)')
 plt.ylabel('Temperature (K)')
 plt.legend(loc='upper right')
 
 plt.figure(2,figsize=(10, 8))
-plt.plot(timespace/3600,el, label="$\dot{m}$ = 2g/s)")
-plt.plot(timespace/3600,el2, label="$\dot{m}$ = 4g/s)")
-plt.plot(timespace/3600,el3, label="$\dot{m}$ = 6g/s)")
+plt.plot(timespace/(3600),el, label="$\dot{m}$ = 2g/s)")
+plt.plot(timespace/(3600),el2, label="$\dot{m}$ = 4g/s)")
+plt.plot(timespace/(3600),el3, label="$\dot{m}$ = 6g/s)")
 plt.xlabel('Time (hr)')
 plt.ylabel('Elevation (m)')
 
@@ -181,3 +195,4 @@ plt.axhline(y=2000, color='r', linestyle='-', label = 'Altitude Setpoint')
 plt.legend(loc='upper right')
 
 plt.show()
+'''
