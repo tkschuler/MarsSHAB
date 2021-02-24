@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.python.org/download/releases/2.7/)
-[![Version](https://warehouse-camo.ingress.cmh1.psfhosted.org/233dfe54c23e0214e7101212ee41d8538f5b4884/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f646a616e676f2e737667)
+![Version](https://warehouse-camo.ingress.cmh1.psfhosted.org/233dfe54c23e0214e7101212ee41d8538f5b4884/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f646a616e676f2e737667)
 
 # Solar Balloon
 The accompanying paper for this code was presented at AAS GNC 2020 and is published here: 
